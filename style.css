@@ -1,0 +1,22 @@
+.ng-scope {
+	border: 1px solid red;
+	background: rgba(255, 0, 0, 0.2);
+}
+
+.modelkey { font-family: sans-serif; }
+.ng-scope .modelkey { color: red; }
+
+.ng-scope .ng-scope {
+	margin: 2px;
+	border: 1px solid blue;
+	background: rgba(0, 0, 255, 0.2);
+}
+
+.ng-scope .ng-scope .modelkey { color: blue; }
+
+.ng-scope .ng-scope .ng-scope {
+	border: 1px solid green;
+	background: rgba(0, 255, 0, 0.2);
+}
+
+.ng-scope .ng-scope .ng-scope .modelkey { color: green; }

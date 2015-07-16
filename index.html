@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>AngularJS Test</title>
+	<script src="node_modules/angular/angular.js"></script>
+	<style>@import url("style.css");</style>
+	<script>
+		angular.module('MyApp', [])
+			.controller('MyController', ['$scope', function($scope) {
+
+				$scope.name = 'John Doe';
+				$scope.feelGood = true;
+				$scope.devices = ['MacBook', 'iMac', 'iPod'];
+
+				$scope.addDevice = function(device) {
+					if ($scope.devices.indexOf(device) < 0) {
+						$scope.devices.push(device);
+					}
+					$scope.newDevice = '';
+				};
+
+				$scope.removeDevice = function(device) {
+					var index = $scope.devices.indexOf(device);
+					if (index > -1) {
+						var res = $scope.devices.splice(index, 1);
+					}
+				};
+
+				$scope.okay = function() {
+					console.log('OK, OK, I GOT IT!');
+				};
+
+			}])
+			.directive('returnKey', function($rootScope) {
+				return {
+					restrict: 'A',
+					link: function(scope, elem, attrs) {
+						elem.bind('keypress', function(event) {
+							if (event.keyCode == 13) {
+								scope.$apply(function() {
+									scope.$eval(attrs.returnKey);
+								});
+							}
+						});
+					}
+				};
+			})
+			.directive('hello', function() {
+				return {
+					restrict: 'EA',
+					scope: { value: '=who' },
+					template: '<h1>Hello, {{value}}!</h1>'
+				}
+			}).directive('ohai', function() {
+				return {
+					restrict: 'EACM',
+					scope: {what:'@wat'},
+					template: '<h1>SAY {{what}}</h1>'
+				}
+			});
+	</script>
+	<style>
+		label { display: block; margin-top: 1.5em; }
+		hello { display: block; }
+	</style>
+</head>
+<body>
+
+	<section ng-app="MyApp">
+
+		<div ng-controller="MyController">
+
+			<hello who="name"></hello>
+			<ohai wat="dude {{name}}"></ohai>
+
+			<label>Now come on, what's you REAL name?</label>
+			<input type="text" ng-model="name" return-key="okay()">
+
+			<label>
+				Feel alright?
+				<input type="checkbox" ng-model="feelGood">
+			</label>
+
+			<h2>Devices</h2>
+
+			<ul>
+				<li ng-repeat="device in devices">
+					{{device}}
+					<button type="button" ng-click="removeDevice(device)">delete</button>
+				</li>
+			</ul>
+
+			<label>Add device</label>
+			<input type="text" ng-model="newDevice" return-key="addDevice(newDevice)">
+			<!-- <button type="button" ng-click="addDevice(newDevice)">Add</button> -->
+
+		</div>
+
+	</section>
+
+	<section id="app2" ng-app ng-init="someVar='Some Value'">
+		<h1>This is a second (bootstraped) ng-app</h1>
+		<input type="text" ng-model="someVar">{{someVar}}
+	</section>
+
+	<script>
+		var app2 = angular.bootstrap(document.querySelector('#app2'));
+	</script>
+	<script src="new.js"></script>
+
+</body>
+</html>
